@@ -1,0 +1,222 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    body.login {
+        min-height: 100vh;
+    }
+
+    .login #container {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        min-width: 0;
+    }
+
+    .login #content {
+        padding: 0;
+    }
+
+    .login #content-main {
+        width: 100%;
+    }
+
+    .admin-login-shell {
+        max-width: 1120px;
+        margin: 2rem auto 0;
+        display: grid;
+        grid-template-columns: 0.95fr 1.05fr;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+
+    .admin-login-panel,
+    .admin-login-card {
+        border-radius: 28px;
+        overflow: hidden;
+    }
+
+    .admin-login-panel {
+        padding: 2.4rem;
+        background: linear-gradient(155deg, rgba(13, 77, 44, 0.96) 0%, rgba(31, 111, 67, 0.92) 56%, rgba(184, 214, 106, 0.84) 100%);
+        color: #f8fff3;
+        box-shadow: 0 28px 70px rgba(13, 77, 44, 0.2);
+    }
+
+    .admin-login-panel p,
+    .admin-login-panel li {
+        color: rgba(248, 255, 243, 0.84);
+    }
+
+    .admin-login-card {
+        padding: 2.4rem;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(31, 111, 67, 0.12);
+        box-shadow: 0 22px 60px rgba(17, 49, 33, 0.1);
+    }
+
+    .admin-kicker {
+        display: inline-flex;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .admin-login-card .admin-kicker {
+        background: rgba(31, 111, 67, 0.08);
+        color: #0d4d2c;
+    }
+
+    .admin-title {
+        margin: 1rem 0 0.75rem;
+        font-size: clamp(2.2rem, 4vw, 3.4rem);
+        line-height: 1;
+    }
+
+    .admin-points {
+        list-style: none;
+        padding: 0;
+        margin: 2rem 0 0;
+        display: grid;
+        gap: 1rem;
+    }
+
+    .admin-points li {
+        padding: 1rem 1.1rem;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .admin-points strong {
+        display: block;
+        color: #fff;
+        margin-bottom: 0.25rem;
+    }
+
+    .login-form .form-row {
+        padding: 0;
+        border: 0;
+        margin-bottom: 1rem;
+    }
+
+    .login-form label {
+        display: block;
+        margin-bottom: 0.45rem;
+        font-weight: 700;
+        color: #0d4d2c;
+    }
+
+    .login-form input {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border-radius: 14px;
+        border: 1px solid rgba(31, 111, 67, 0.16);
+        background: rgba(248, 251, 246, 0.96);
+    }
+
+    .submit-row {
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        margin-top: 1rem;
+    }
+
+    .submit-row input {
+        width: 100%;
+        padding: 0.95rem 1.2rem;
+        font-weight: 700;
+    }
+
+    .errornote {
+        border-radius: 14px;
+        border: 1px solid rgba(180, 35, 24, 0.14);
+        background: rgba(180, 35, 24, 0.08);
+    }
+
+    @media (max-width: 900px) {
+        .admin-login-shell {
+            grid-template-columns: 1fr;
+            margin-top: 1rem;
+        }
+
+        .admin-login-panel,
+        .admin-login-card {
+            padding: 1.6rem;
+            border-radius: 22px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-login-shell">
+    <section class="admin-login-panel">
+        <span class="admin-kicker">Back Office</span>
+        <h1 class="admin-title">Agrovet Pro administration portal.</h1>
+        <p>Manage products, users, deliveries, and records from a branded control space that matches the rest of the platform.</p>
+
+        <ul class="admin-points">
+            <li>
+                <strong>Inventory control</strong>
+                Maintain the medication and service catalog used by your storefront.
+            </li>
+            <li>
+                <strong>User management</strong>
+                Review client, driver, and admin accounts from one place.
+            </li>
+            <li>
+                <strong>Operational visibility</strong>
+                Keep the data behind orders and delivery tracking organized.
+            </li>
+        </ul>
+    </section>
+
+    <section class="admin-login-card">
+        <span class="admin-kicker">Admin Login</span>
+        <h2 class="mt-3 mb-2">Sign in to continue</h2>
+        <p class="text-muted mb-4">Use your administrator credentials to enter the Agrovet Pro management area.</p>
+
+        {% if form.errors and not form.non_field_errors %}
+        <p class="errornote">
+            {% blocktranslate count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktranslate %}
+        </p>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <p class="errornote">{{ error }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form" class="login-form">{% csrf_token %}
+            <div class="form-row">
+                {{ form.username.errors }}
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="form-row">
+                {{ form.password.errors }}
+                {{ form.password.label_tag }}
+                {{ form.password }}
+                <input type="hidden" name="next" value="{{ next }}">
+            </div>
+            {% url 'admin_password_reset' as password_reset_url %}
+            {% if password_reset_url %}
+            <div class="password-reset-link mb-3">
+                <a href="{{ password_reset_url }}">{% translate 'Forgotten your password or username?' %}</a>
+            </div>
+            {% endif %}
+            <div class="submit-row">
+                <input type="submit" value="{% translate 'Log in' %}">
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

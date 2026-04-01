@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Agrovet Pro | Smart Farm Care{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --brand-green: #1f6f43;
+            --brand-green-deep: #0d4d2c;
+            --brand-lime: #b8d66a;
+            --brand-earth: #d7c3a5;
+            --brand-cream: #f6f1e8;
+            --brand-ink: #163126;
+            --brand-muted: #5f756b;
+            --brand-card: rgba(255, 255, 255, 0.78);
+            --brand-border: rgba(31, 111, 67, 0.12);
+            --shadow-soft: 0 24px 60px rgba(18, 56, 37, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "DM Sans", sans-serif;
+            color: var(--brand-ink);
+            background:
+                radial-gradient(circle at top left, rgba(184, 214, 106, 0.25), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(215, 195, 165, 0.35), transparent 28%),
+                linear-gradient(180deg, #f8f4ed 0%, #eef4eb 50%, #f7faf3 100%);
+        }
+
+        h1, h2, h3, h4, h5, h6, .navbar-brand {
+            font-family: "Outfit", sans-serif;
+            letter-spacing: -0.03em;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .site-shell {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .site-shell::before,
+        .site-shell::after {
+            content: "";
+            position: fixed;
+            width: 22rem;
+            height: 22rem;
+            border-radius: 50%;
+            filter: blur(18px);
+            opacity: 0.45;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .site-shell::before {
+            top: -6rem;
+            right: -6rem;
+            background: rgba(184, 214, 106, 0.32);
+        }
+
+        .site-shell::after {
+            bottom: -7rem;
+            left: -7rem;
+            background: rgba(31, 111, 67, 0.15);
+        }
+
+        .site-nav {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            padding: 1rem 0;
+            background: rgba(246, 241, 232, 0.72);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(31, 111, 67, 0.08);
+        }
+
+        .nav-panel {
+            border: 1px solid rgba(31, 111, 67, 0.12);
+            background: rgba(255, 255, 255, 0.78);
+            box-shadow: 0 12px 30px rgba(19, 53, 37, 0.08);
+            border-radius: 1.25rem;
+            padding: 0.8rem 1rem;
+        }
+
+        .navbar-brand {
+            color: var(--brand-green-deep);
+            font-size: 1.35rem;
+            font-weight: 800;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.4rem;
+            height: 2.4rem;
+            margin-right: 0.7rem;
+            border-radius: 0.9rem;
+            color: #fff;
+            background: linear-gradient(135deg, var(--brand-green) 0%, #2f8f59 100%);
+            box-shadow: 0 10px 24px rgba(31, 111, 67, 0.25);
+        }
+
+        .nav-link {
+            color: var(--brand-ink) !important;
+            font-weight: 500;
+            padding: 0.6rem 0.9rem !important;
+            border-radius: 999px;
+            transition: 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(31, 111, 67, 0.08);
+            color: var(--brand-green-deep) !important;
+        }
+
+        .nav-user {
+            color: var(--brand-muted);
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        .btn-brand {
+            background: linear-gradient(135deg, var(--brand-green) 0%, #2f8f59 100%);
+            border: none;
+            color: #fff;
+            box-shadow: 0 16px 28px rgba(31, 111, 67, 0.22);
+        }
+
+        .btn-brand:hover,
+        .btn-brand:focus {
+            color: #fff;
+            background: linear-gradient(135deg, #185836 0%, #28784d 100%);
+        }
+
+        .btn-soft {
+            border: 1px solid rgba(31, 111, 67, 0.14);
+            color: var(--brand-green-deep);
+            background: rgba(255, 255, 255, 0.72);
+        }
+
+        .btn-soft:hover,
+        .btn-soft:focus {
+            color: var(--brand-green-deep);
+            background: rgba(184, 214, 106, 0.2);
+        }
+
+        .content-wrap {
+            position: relative;
+            z-index: 1;
+            padding: 1.25rem 0 4rem;
+        }
+
+        .app-layout {
+            display: grid;
+            grid-template-columns: 300px minmax(0, 1fr);
+            gap: 1.4rem;
+            align-items: start;
+        }
+
+        .app-sidebar {
+            position: sticky;
+            top: 6.6rem;
+            padding: 1.35rem;
+            border-radius: 1.6rem;
+            background: rgba(255, 255, 255, 0.84);
+            border: 1px solid rgba(31, 111, 67, 0.12);
+            box-shadow: 0 18px 44px rgba(19, 53, 37, 0.08);
+        }
+
+        .sidebar-title {
+            margin-bottom: 0.25rem;
+            color: var(--brand-green-deep);
+        }
+
+        .sidebar-copy {
+            color: var(--brand-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .sidebar-stack {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(31, 111, 67, 0.1);
+            background: rgba(246, 249, 243, 0.9);
+            color: var(--brand-ink);
+            transition: 0.2s ease;
+        }
+
+        .sidebar-link:hover {
+            color: var(--brand-green-deep);
+            background: rgba(184, 214, 106, 0.16);
+            border-color: rgba(31, 111, 67, 0.16);
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(135deg, rgba(31, 111, 67, 0.14) 0%, rgba(184, 214, 106, 0.22) 100%);
+            border-color: rgba(31, 111, 67, 0.22);
+        }
+
+        .sidebar-link strong {
+            display: block;
+            font-size: 0.96rem;
+        }
+
+        .sidebar-link span {
+            color: var(--brand-muted);
+            font-size: 0.84rem;
+        }
+
+        .sidebar-user {
+            margin-top: 1.2rem;
+            padding: 1rem;
+            border-radius: 1.1rem;
+            background: linear-gradient(135deg, rgba(13, 77, 44, 0.96) 0%, rgba(31, 111, 67, 0.92) 100%);
+            color: #f7fff2;
+        }
+
+        .sidebar-user p {
+            margin: 0.35rem 0 0;
+            color: rgba(247, 255, 242, 0.82);
+            font-size: 0.92rem;
+        }
+
+        .app-main {
+            min-width: 0;
+        }
+
+        .glass-card {
+            background: var(--brand-card);
+            border: 1px solid var(--brand-border);
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .pill-tag,
+        .hero-chip,
+        .badge-soft,
+        .order-label {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.42rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(31, 111, 67, 0.08);
+            color: var(--brand-green-deep);
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+        }
+
+        .price-pill,
+        .location-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.55rem 0.85rem;
+            border-radius: 999px;
+            background: rgba(22, 49, 38, 0.06);
+            color: var(--brand-ink);
+            font-weight: 600;
+        }
+
+        .empty-card {
+            padding: 3rem 1.5rem;
+            text-align: center;
+            border-radius: 1.6rem;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px dashed rgba(31, 111, 67, 0.18);
+            color: var(--brand-muted);
+            box-shadow: 0 18px 44px rgba(19, 53, 37, 0.05);
+        }
+
+        .alert-stack {
+            display: grid;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-brand {
+            padding: 0.95rem 1rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(31, 111, 67, 0.12);
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: 0 12px 28px rgba(19, 53, 37, 0.06);
+        }
+
+        .alert-brand.alert-success {
+            border-color: rgba(31, 111, 67, 0.18);
+            background: rgba(184, 214, 106, 0.18);
+        }
+
+        .alert-brand.alert-warning {
+            border-color: rgba(180, 120, 24, 0.18);
+            background: rgba(255, 231, 173, 0.45);
+        }
+
+        @media (max-width: 991.98px) {
+            .nav-panel {
+                padding: 0.95rem;
+            }
+
+            .nav-user {
+                margin: 0.5rem 0;
+            }
+
+            .app-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .app-sidebar {
+                position: static;
+            }
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="site-shell">
+        <nav class="site-nav">
+            <div class="container">
+                <div class="nav-panel navbar navbar-expand-lg p-0">
+                    <a class="navbar-brand d-flex align-items-center" href="{% url 'index' %}">
+                        <span class="brand-mark">A</span>
+                        Agrovet Pro
+                    </a>
+                    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav" aria-controls="siteNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="siteNav">
+                        <div class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+                            <a class="nav-link" href="{% url 'index' %}">Home</a>
+                            {% if user.is_authenticated %}
+                                <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                                <a class="nav-link" href="{% url 'order_history' %}">My Orders</a>
+                                {% if user.role == 'driver' %}
+                                    <a class="nav-link" href="{% url 'driver_dashboard' %}">Driver Panel</a>
+                                {% endif %}
+                                {% if user.is_staff or user.is_superuser or user.role == 'admin' %}
+                                    <a class="nav-link" href="/admin/">Admin</a>
+                                {% endif %}
+                                <form action="{% url 'logout' %}" method="post" class="mb-0">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-soft rounded-pill px-3">Logout</button>
+                                </form>
+                            {% else %}
+                                <a class="nav-link" href="{% url 'login' %}">Sign In</a>
+                                <a class="btn btn-brand rounded-pill px-4 ms-lg-2 mt-2 mt-lg-0" href="{% url 'register' %}">Create Account</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="content-wrap">
+            <div class="container">
+                {% if messages %}
+                    <div class="alert-stack">
+                        {% for message in messages %}
+                            <div class="alert-brand{% if message.tags %} alert-{{ message.tags }}{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if user.is_authenticated %}
+                    <div class="app-layout">
+                        <aside class="app-sidebar">
+                            <span class="pill-tag">System Menu</span>
+                            <h4 class="sidebar-title mt-3">Agrovet workspace</h4>
+                            <p class="sidebar-copy">Move through the system from one clean control panel.</p>
+
+                            <div class="sidebar-stack">
+                                <a class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+                                    <div>
+                                        <strong>Dashboard</strong>
+                                        <span>Overview and quick actions</span>
+                                    </div>
+                                </a>
+                                <a class="sidebar-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="{% url 'index' %}">
+                                    <div>
+                                        <strong>Storefront</strong>
+                                        <span>Browse meds and services</span>
+                                    </div>
+                                </a>
+                                <a class="sidebar-link {% if request.resolver_match.url_name == 'order_history' %}active{% endif %}" href="{% url 'order_history' %}">
+                                    <div>
+                                        <strong>Orders</strong>
+                                        <span>Track payments and delivery</span>
+                                    </div>
+                                </a>
+                                {% if user.role == 'driver' %}
+                                    <a class="sidebar-link {% if request.resolver_match.url_name == 'driver_dashboard' %}active{% endif %}" href="{% url 'driver_dashboard' %}">
+                                        <div>
+                                            <strong>Driver Panel</strong>
+                                            <span>Manage assigned deliveries</span>
+                                        </div>
+                                    </a>
+                                {% endif %}
+                                {% if user.is_staff or user.is_superuser or user.role == 'admin' %}
+                                    <a class="sidebar-link" href="/admin/">
+                                        <div>
+                                            <strong>Admin Panel</strong>
+                                            <span>Back-office system control</span>
+                                        </div>
+                                    </a>
+                                {% endif %}
+                            </div>
+
+                            <div class="sidebar-user">
+                                <strong>Customer</strong>
+                                <p>{{ user.get_role_display }}{% if user.location %} | {{ user.location }}{% endif %}</p>
+                            </div>
+                        </aside>
+                {% endif %}
+                        {% if user.is_authenticated %}<div class="app-main">{% endif %}
+                        {% block content %}{% endblock %}
+                {% if user.is_authenticated %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

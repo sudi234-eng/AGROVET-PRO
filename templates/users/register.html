@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+
+{% block title %}Agrovet Pro | Register{% endblock %}
+
+{% block extra_head %}
+<style>
+    .auth-shell {
+        min-height: calc(100vh - 12rem);
+        display: grid;
+        align-items: center;
+    }
+
+    .auth-grid {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+
+    .auth-panel,
+    .auth-form-card {
+        border-radius: 1.8rem;
+        overflow: hidden;
+    }
+
+    .auth-panel {
+        position: relative;
+        padding: 2.3rem;
+        background:
+            linear-gradient(160deg, rgba(184, 214, 106, 0.95) 0%, rgba(85, 145, 66, 0.92) 48%, rgba(13, 77, 44, 0.96) 100%);
+        color: #f8fff1;
+        box-shadow: 0 28px 70px rgba(13, 77, 44, 0.22);
+    }
+
+    .auth-panel::before,
+    .auth-panel::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.09);
+    }
+
+    .auth-panel::before {
+        width: 13rem;
+        height: 13rem;
+        top: -4rem;
+        right: -4rem;
+    }
+
+    .auth-panel::after {
+        width: 10rem;
+        height: 10rem;
+        bottom: -3rem;
+        left: -2rem;
+    }
+
+    .auth-panel p,
+    .auth-panel li {
+        color: rgba(248, 255, 241, 0.86);
+    }
+
+    .auth-form-card {
+        padding: 2.3rem;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(31, 111, 67, 0.12);
+        box-shadow: 0 22px 60px rgba(17, 49, 33, 0.12);
+    }
+
+    .auth-kicker {
+        display: inline-block;
+        margin-bottom: 0.8rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.16);
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .auth-form-card .auth-kicker {
+        background: rgba(31, 111, 67, 0.08);
+        color: var(--brand-green-deep);
+    }
+
+    .auth-title {
+        margin-bottom: 0.8rem;
+        font-size: clamp(2rem, 4vw, 3rem);
+        line-height: 1;
+    }
+
+    .auth-copy {
+        color: var(--brand-muted);
+        margin-bottom: 1.5rem;
+    }
+
+    .auth-list {
+        display: grid;
+        gap: 1rem;
+        padding-left: 0;
+        list-style: none;
+        margin: 2rem 0 0;
+    }
+
+    .auth-list li {
+        padding: 1rem 1.1rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .auth-list strong {
+        display: block;
+        color: #fff;
+        margin-bottom: 0.25rem;
+    }
+
+    .auth-form {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .field-block label {
+        display: block;
+        margin-bottom: 0.45rem;
+        font-weight: 700;
+        color: var(--brand-green-deep);
+    }
+
+    .field-block input {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(31, 111, 67, 0.16);
+        background: rgba(248, 251, 246, 0.96);
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .field-block input:focus {
+        border-color: rgba(31, 111, 67, 0.5);
+        box-shadow: 0 0 0 0.25rem rgba(31, 111, 67, 0.12);
+    }
+
+    .field-help,
+    .field-errors,
+    .form-errors {
+        font-size: 0.92rem;
+    }
+
+    .field-help {
+        color: var(--brand-muted);
+        margin-top: 0.45rem;
+    }
+
+    .field-errors,
+    .form-errors {
+        color: #b42318;
+        margin: 0.45rem 0 0;
+    }
+
+    .form-errors {
+        padding: 0.9rem 1rem;
+        border-radius: 1rem;
+        background: rgba(180, 35, 24, 0.08);
+        border: 1px solid rgba(180, 35, 24, 0.12);
+    }
+
+    .auth-submit {
+        margin-top: 0.4rem;
+        padding: 0.95rem 1.2rem;
+        border-radius: 999px;
+        font-weight: 700;
+    }
+
+    .auth-link {
+        margin-top: 1rem;
+        color: var(--brand-muted);
+    }
+
+    .auth-link a {
+        color: var(--brand-green-deep);
+        font-weight: 700;
+    }
+
+    @media (max-width: 991.98px) {
+        .auth-grid,
+        .field-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .auth-panel,
+        .auth-form-card {
+            padding: 1.5rem;
+            border-radius: 1.4rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="auth-shell">
+    <div class="auth-grid">
+        <aside class="auth-panel">
+            <span class="auth-kicker">Join The Platform</span>
+            <h1 class="auth-title">Create your Agrovet Pro account.</h1>
+            <p>
+                Set up your farmer profile once, then order meds, request services, and follow deliveries with much less back-and-forth.
+            </p>
+
+            <ul class="auth-list">
+                <li>
+                    <strong>Personalized delivery details</strong>
+                    Save your location and contact details for faster future orders.
+                </li>
+                <li>
+                    <strong>Better service visibility</strong>
+                    Keep your account tied to order history and status updates.
+                </li>
+                <li>
+                    <strong>Ready for growth</strong>
+                    Built to support repeat customers as your agrovet business expands.
+                </li>
+            </ul>
+        </aside>
+
+        <div class="auth-form-card">
+            <span class="auth-kicker">Register</span>
+            <h2 class="mb-2">Open your account</h2>
+            <p class="auth-copy">Fill in your details below to start ordering and tracking through Agrovet Pro.</p>
+
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                <div class="field-grid">
+                    {% for field in form %}
+                        <div class="field-block">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="field-help">{{ field.help_text|safe }}</div>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="field-errors">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-brand auth-submit w-100">Create Agrovet Pro Account</button>
+            </form>
+
+            <p class="auth-link mb-0">
+                Already have an account? <a href="{% url 'login' %}">Login here</a>
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}

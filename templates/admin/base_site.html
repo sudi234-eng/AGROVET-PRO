@@ -1,0 +1,136 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Agrovet Pro Admin{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --admin-green: #1f6f43;
+        --admin-green-deep: #0d4d2c;
+        --admin-lime: #b8d66a;
+        --admin-cream: #f6f1e8;
+        --admin-ink: #163126;
+        --admin-muted: #5f756b;
+        --admin-border: rgba(31, 111, 67, 0.16);
+    }
+
+    body {
+        font-family: "DM Sans", sans-serif;
+        background:
+            radial-gradient(circle at top left, rgba(184, 214, 106, 0.16), transparent 28%),
+            linear-gradient(180deg, #f8f4ed 0%, #eef4eb 55%, #f7faf3 100%);
+        color: var(--admin-ink);
+    }
+
+    #header {
+        background: linear-gradient(135deg, var(--admin-green-deep) 0%, var(--admin-green) 62%, #6da84f 100%);
+        color: #f8fff3;
+        box-shadow: 0 16px 34px rgba(13, 77, 44, 0.18);
+    }
+
+    #branding h1,
+    #branding h1 a:link,
+    #branding h1 a:visited {
+        color: #fff;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+    }
+
+    div.breadcrumbs {
+        background: rgba(255, 255, 255, 0.68);
+        color: var(--admin-muted);
+        border-bottom: 1px solid var(--admin-border);
+    }
+
+    div.breadcrumbs a {
+        color: var(--admin-green-deep);
+    }
+
+    #content,
+    .module,
+    #content-related,
+    .inline-group,
+    .dashboard .module table,
+    .submit-row {
+        border-radius: 18px;
+    }
+
+    .module,
+    #content-related,
+    .inline-group,
+    .submit-row,
+    .dashboard .module table {
+        background: rgba(255, 255, 255, 0.86);
+        border: 1px solid var(--admin-border);
+        box-shadow: 0 16px 36px rgba(19, 53, 37, 0.06);
+    }
+
+    .module h2,
+    .module caption,
+    .inline-group h2 {
+        background: rgba(31, 111, 67, 0.08);
+        color: var(--admin-green-deep);
+        border-radius: 14px 14px 0 0;
+    }
+
+    a:link,
+    a:visited {
+        color: var(--admin-green-deep);
+    }
+
+    a:hover {
+        color: #144f30;
+    }
+
+    .button,
+    input[type=submit],
+    input[type=button],
+    .submit-row input,
+    a.button {
+        background: linear-gradient(135deg, var(--admin-green) 0%, #2f8f59 100%);
+        border: none;
+        color: #fff;
+        border-radius: 999px;
+        padding-inline: 16px;
+        box-shadow: 0 14px 24px rgba(31, 111, 67, 0.18);
+    }
+
+    .button.default,
+    input[type=submit].default,
+    .submit-row input.default {
+        background: linear-gradient(135deg, var(--admin-green-deep) 0%, var(--admin-green) 100%);
+    }
+
+    input,
+    textarea,
+    select,
+    .vTextField {
+        border-radius: 12px;
+        border: 1px solid var(--admin-border);
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border-color: rgba(31, 111, 67, 0.45);
+        box-shadow: 0 0 0 3px rgba(31, 111, 67, 0.12);
+    }
+
+    #nav-sidebar {
+        background: rgba(255, 255, 255, 0.72);
+        border-right: 1px solid var(--admin-border);
+    }
+
+    #nav-sidebar .current-model {
+        background: rgba(184, 214, 106, 0.24);
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Agrovet Pro Admin</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

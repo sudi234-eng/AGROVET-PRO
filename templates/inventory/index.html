@@ -1,0 +1,617 @@
+{% extends 'base.html' %}
+
+{% block title %}Agrovet Pro | Trusted Farm Health Homepage{% endblock %}
+
+{% block extra_head %}
+<style>
+    .homepage {
+        display: grid;
+        gap: 2rem;
+    }
+
+    .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 3rem;
+        border-radius: 2rem;
+        background:
+            linear-gradient(135deg, rgba(13, 77, 44, 0.96) 0%, rgba(31, 111, 67, 0.92) 48%, rgba(184, 214, 106, 0.82) 100%);
+        color: #f8fff2;
+        box-shadow: 0 28px 80px rgba(13, 77, 44, 0.26);
+    }
+
+    .hero::before,
+    .hero::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.09);
+    }
+
+    .hero::before {
+        width: 20rem;
+        height: 20rem;
+        top: -8rem;
+        right: -3rem;
+    }
+
+    .hero::after {
+        width: 12rem;
+        height: 12rem;
+        bottom: -4rem;
+        left: 35%;
+    }
+
+    .hero-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.55rem 0.9rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .hero h1 {
+        font-size: clamp(2.6rem, 6vw, 5.2rem);
+        line-height: 0.98;
+        margin: 1rem 0;
+        max-width: 9.5ch;
+    }
+
+    .hero-copy {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero p {
+        max-width: 38rem;
+        font-size: 1.08rem;
+        color: rgba(248, 255, 242, 0.88);
+    }
+
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1.8rem;
+    }
+
+    .hero-actions .btn {
+        padding: 0.95rem 1.5rem;
+        border-radius: 999px;
+        font-weight: 700;
+    }
+
+    .btn-light-brand {
+        background: #f6fbe7;
+        color: #0d4d2c;
+        border: none;
+    }
+
+    .btn-light-brand:hover,
+    .btn-light-brand:focus {
+        background: #ffffff;
+        color: #0d4d2c;
+    }
+
+    .btn-ghost-brand {
+        background: transparent;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-ghost-brand:hover,
+    .btn-ghost-brand:focus {
+        background: rgba(255, 255, 255, 0.09);
+        color: #fff;
+    }
+
+    .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .stat-card {
+        padding: 1.15rem 1rem;
+        border-radius: 1.25rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(10px);
+    }
+
+    .stat-card strong {
+        display: block;
+        font-family: "Outfit", sans-serif;
+        font-size: 1.75rem;
+        line-height: 1;
+        margin-bottom: 0.35rem;
+    }
+
+    .hero-side {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 1rem;
+    }
+
+    .floating-card {
+        padding: 1.4rem;
+        border-radius: 1.6rem;
+        background: rgba(247, 250, 243, 0.96);
+        color: #163126;
+        box-shadow: 0 20px 40px rgba(10, 42, 24, 0.15);
+    }
+
+    .floating-card h5 {
+        margin-bottom: 0.6rem;
+    }
+
+    .floating-card p {
+        margin: 0;
+        color: #4b6157;
+        font-size: 0.95rem;
+    }
+
+    .order-strip {
+        display: grid;
+        gap: 0.85rem;
+    }
+
+    .order-chip {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.85rem 1rem;
+        border-radius: 1rem;
+        background: #fff;
+        border: 1px solid rgba(31, 111, 67, 0.1);
+    }
+
+    .order-chip span {
+        color: #597066;
+        font-size: 0.9rem;
+    }
+
+    .section-card {
+        padding: 2rem;
+        border-radius: 1.8rem;
+    }
+
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 1rem;
+        margin-bottom: 1.6rem;
+    }
+
+    .section-title p {
+        margin: 0;
+        color: var(--brand-muted);
+        max-width: 36rem;
+    }
+
+    .pill-tag {
+        display: inline-block;
+        margin-bottom: 0.7rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(31, 111, 67, 0.08);
+        color: var(--brand-green-deep);
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .feature-grid,
+    .product-grid,
+    .story-grid {
+        display: grid;
+        gap: 1.2rem;
+    }
+
+    .feature-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .feature-card,
+    .product-card,
+    .story-card {
+        height: 100%;
+        padding: 1.4rem;
+        border-radius: 1.4rem;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(31, 111, 67, 0.1);
+        box-shadow: 0 16px 34px rgba(20, 48, 33, 0.08);
+    }
+
+    .feature-icon {
+        width: 3rem;
+        height: 3rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 1rem;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #fff;
+        background: linear-gradient(135deg, #1f6f43 0%, #83b95a 100%);
+    }
+
+    .feature-card p,
+    .story-card p {
+        color: var(--brand-muted);
+        margin-bottom: 0;
+    }
+
+    .story-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .product-card {
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .product-media {
+        position: relative;
+        height: 225px;
+        overflow: hidden;
+        background: linear-gradient(135deg, rgba(184, 214, 106, 0.3), rgba(13, 77, 44, 0.14));
+    }
+
+    .product-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.35s ease;
+    }
+
+    .product-card:hover .product-media img {
+        transform: scale(1.05);
+    }
+
+    .product-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Outfit", sans-serif;
+        font-size: 1.1rem;
+        color: var(--brand-green-deep);
+        background: linear-gradient(135deg, rgba(184, 214, 106, 0.35), rgba(255, 255, 255, 0.6));
+    }
+
+    .product-body {
+        padding: 1.4rem;
+    }
+
+    .product-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .badge-soft {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 0.7rem;
+        border-radius: 999px;
+        background: rgba(31, 111, 67, 0.08);
+        color: var(--brand-green-deep);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .price-tag {
+        font-family: "Outfit", sans-serif;
+        font-size: 1.4rem;
+        color: var(--brand-green-deep);
+        margin: 0;
+    }
+
+    .product-body p {
+        color: var(--brand-muted);
+        min-height: 3.3rem;
+    }
+
+    .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.1rem;
+    }
+
+    .stock-note {
+        color: var(--brand-muted);
+        font-size: 0.92rem;
+    }
+
+    .cta-band {
+        padding: 2.2rem;
+        border-radius: 1.8rem;
+        background:
+            linear-gradient(135deg, rgba(31, 111, 67, 0.95) 0%, rgba(59, 130, 88, 0.92) 100%);
+        color: #f6fff6;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .cta-band p {
+        margin: 0.6rem 0 0;
+        color: rgba(246, 255, 246, 0.82);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1.5rem;
+        border: 1px dashed rgba(31, 111, 67, 0.18);
+        border-radius: 1.6rem;
+        background: rgba(255, 255, 255, 0.65);
+        color: var(--brand-muted);
+    }
+
+    @media (max-width: 991.98px) {
+        .hero {
+            padding: 2rem;
+        }
+
+        .hero-stats,
+        .feature-grid,
+        .product-grid,
+        .story-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .cta-band {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .hero {
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+        }
+
+        .section-card,
+        .cta-band {
+            padding: 1.4rem;
+        }
+
+        .hero-actions,
+        .product-footer {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .section-title {
+            align-items: start;
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="homepage">
+    <section class="hero">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-7">
+                <div class="hero-copy">
+                    <span class="hero-label">Agri health, delivered with confidence</span>
+                    <h1>Professional agrovet care for modern farmers.</h1>
+                    <p>
+                        Agrovet Pro helps livestock keepers and growers access trusted farm medication,
+                        responsive vet services, and reliable delivery support from one clean platform.
+                    </p>
+
+                    <div class="hero-actions">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'order_history' %}" class="btn btn-light-brand">Track My Orders</a>
+                        {% else %}
+                            <a href="{% url 'register' %}" class="btn btn-light-brand">Create Free Account</a>
+                            <a href="{% url 'login' %}" class="btn btn-ghost-brand">Sign In</a>
+                        {% endif %}
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <strong>{{ products|length }}</strong>
+                            <span>farm products and services listed</span>
+                        </div>
+                        <div class="stat-card">
+                            <strong>24/7</strong>
+                            <span>digital access to order and follow up</span>
+                        </div>
+                        <div class="stat-card">
+                            <strong>M-Pesa</strong>
+                            <span>familiar payment flow for faster checkout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="hero-side">
+                    <div class="floating-card">
+                        <span class="pill-tag">Farmer Snapshot</span>
+                        {% if user.is_authenticated %}
+                            <h5>Welcome back</h5>
+                            <p>
+                                Your account is ready for fast ordering and delivery tracking.
+                                {% if user.location %}Current location: {{ user.location }}.{% endif %}
+                            </p>
+                        {% else %}
+                            <h5>Everything in one place</h5>
+                            <p>
+                                Register once, place orders in minutes, and monitor each delivery from payment to drop-off.
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <div class="floating-card">
+                        <span class="pill-tag">Live Workflow</span>
+                        <div class="order-strip">
+                            <div class="order-chip">
+                                <div>
+                                    <strong>1. Select treatment</strong>
+                                    <span>Browse meds and services</span>
+                                </div>
+                                <strong>KES</strong>
+                            </div>
+                            <div class="order-chip">
+                                <div>
+                                    <strong>2. Pay securely</strong>
+                                    <span>M-Pesa prompt sent to your phone</span>
+                                </div>
+                                <strong>STK</strong>
+                            </div>
+                            <div class="order-chip">
+                                <div>
+                                    <strong>3. Track delivery</strong>
+                                    <span>Follow updates until arrival</span>
+                                </div>
+                                <strong>ETA</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="glass-card section-card">
+        <div class="section-title">
+            <div>
+                <span class="pill-tag">Why Agrovet Pro</span>
+                <h2 class="mb-2">Built for trusted farm operations, not just online shopping.</h2>
+            </div>
+            <p>
+                The platform combines product ordering, vet support, payment collection, and delivery visibility in one farmer-friendly flow.
+            </p>
+        </div>
+
+        <div class="feature-grid">
+            <article class="feature-card">
+                <div class="feature-icon">01</div>
+                <h4>Professional-grade catalog</h4>
+                <p>Present medications and services in a clean store experience that makes decisions faster for busy farmers.</p>
+            </article>
+            <article class="feature-card">
+                <div class="feature-icon">02</div>
+                <h4>Simple rural-friendly payments</h4>
+                <p>Use familiar M-Pesa checkout flows so customers can confirm orders without complicated card forms.</p>
+            </article>
+            <article class="feature-card">
+                <div class="feature-icon">03</div>
+                <h4>Delivery tracking visibility</h4>
+                <p>Keep clients informed from pending payment to in-transit and final delivery with a clear order history.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="glass-card section-card">
+        <div class="section-title">
+            <div>
+                <span class="pill-tag">Featured Catalog</span>
+                <h2 class="mb-2">Top meds and services ready for farmers today.</h2>
+            </div>
+            <p>Each card keeps the action clear so visitors can move from browsing to ordering with less friction.</p>
+        </div>
+
+        {% if products %}
+            <div class="product-grid">
+                {% for product in products|slice:":6" %}
+                    <article class="product-card">
+                        <div class="product-media">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <div class="product-placeholder">{{ product.name }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-body">
+                            <div class="product-meta">
+                                <span class="badge-soft">{{ product.get_category_display }}</span>
+                                <p class="price-tag">KES {{ product.price }}</p>
+                            </div>
+                            <h4>{{ product.name }}</h4>
+                            <p>{{ product.description|truncatewords:18 }}</p>
+
+                            <div class="product-footer">
+                                <span class="stock-note">Stock available: {{ product.stock_quantity }}</span>
+                                {% if user.is_authenticated %}
+                                    <a href="{% url 'create_order' product.id %}" class="btn btn-brand rounded-pill px-4">Order Now</a>
+                                {% else %}
+                                    <a href="{% url 'login' %}" class="btn btn-soft rounded-pill px-4">Login to Order</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h4 class="mb-2">Catalog coming soon</h4>
+                <p class="mb-0">Products have not been added yet. Once inventory is loaded, featured items will appear here automatically.</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <section class="story-grid">
+        <article class="glass-card section-card story-card">
+            <span class="pill-tag">Operations</span>
+            <h3>From store shelf to farm gate with less confusion.</h3>
+            <p>
+                Agrovet Pro is structured to support ordering, tracking, and customer confidence in a single experience.
+                That makes it easier for your team to serve more farmers while keeping service quality high.
+            </p>
+        </article>
+
+        <article class="glass-card section-card story-card">
+            <span class="pill-tag">Trust</span>
+            <h3>Designed to feel dependable.</h3>
+            <p>
+                Clean visuals, strong calls to action, and visible process steps make the homepage feel more professional for both first-time and returning users.
+            </p>
+        </article>
+    </section>
+
+    <section class="cta-band">
+        <div>
+            <span class="pill-tag bg-white text-dark">Ready to grow</span>
+            <h3 class="mb-0">Launch a stronger digital front door for your agrovet business.</h3>
+            <p>Bring farmers in with a homepage that looks serious, trustworthy, and ready for real orders.</p>
+        </div>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'order_history' %}" class="btn btn-light-brand btn-lg">Open My Dashboard</a>
+        {% else %}
+            <a href="{% url 'register' %}" class="btn btn-light-brand btn-lg">Join Agrovet Pro</a>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

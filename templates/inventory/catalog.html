@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Agrovet Pro | Catalog{% endblock %}
+
+{% block extra_head %}
+<style>
+    .catalog-shell {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .catalog-hero {
+        padding: 2.2rem;
+        border-radius: 1.8rem;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(31, 111, 67, 0.12);
+        box-shadow: 0 20px 48px rgba(19, 53, 37, 0.08);
+    }
+
+    .catalog-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.2rem;
+    }
+
+    .catalog-card {
+        padding: 1.4rem;
+        border-radius: 1.4rem;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(31, 111, 67, 0.1);
+        box-shadow: 0 18px 44px rgba(19, 53, 37, 0.08);
+    }
+
+    .catalog-card p {
+        color: var(--brand-muted);
+    }
+
+    .catalog-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        gap: 1rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .catalog-price {
+        font-family: "Outfit", sans-serif;
+        font-size: 1.35rem;
+        color: var(--brand-green-deep);
+    }
+
+    @media (max-width: 991.98px) {
+        .catalog-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="catalog-shell">
+    <section class="catalog-hero">
+        <span class="pill-tag">Catalog</span>
+        <h1 class="mb-2">Available meds and farm support services.</h1>
+        <p class="mb-0 text-muted">A clean product list for faster ordering, better stock visibility, and a more professional buyer experience.</p>
+    </section>
+
+    {% if products %}
+        <section class="catalog-grid">
+            {% for product in products %}
+                <article class="catalog-card">
+                    <div class="catalog-top">
+                        <div>
+                            <span class="badge-soft">{{ product.get_category_display }}</span>
+                            <h3 class="mt-3 mb-1">{{ product.name }}</h3>
+                        </div>
+                        <span class="catalog-price">KES {{ product.price }}</span>
+                    </div>
+                    <p>{{ product.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                        <span class="stock-note">Stock: {{ product.stock_quantity }}</span>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'create_order' product.id %}" class="btn btn-brand rounded-pill px-4">Buy Now</a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-soft rounded-pill px-4">Login to Order</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="empty-card">
+            <h3 class="mb-2">No products in stock</h3>
+            <p class="mb-0">Catalog items will appear here once inventory is available.</p>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

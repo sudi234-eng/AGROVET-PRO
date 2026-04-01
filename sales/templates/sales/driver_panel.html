@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Agrovet Pro | Driver Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+    .driver-shell {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .driver-hero {
+        padding: 2.2rem;
+        border-radius: 1.8rem;
+        background: linear-gradient(135deg, rgba(22, 49, 38, 0.96) 0%, rgba(31, 111, 67, 0.92) 60%, rgba(184, 214, 106, 0.8) 100%);
+        color: #f8fff3;
+    }
+
+    .driver-hero p {
+        color: rgba(248, 255, 243, 0.84);
+        margin-bottom: 0;
+    }
+
+    .delivery-list {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .driver-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .summary-card {
+        padding: 1.2rem;
+        border-radius: 1.3rem;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(31, 111, 67, 0.1);
+        box-shadow: 0 18px 44px rgba(19, 53, 37, 0.08);
+    }
+
+    .summary-card strong {
+        display: block;
+        font-family: "Outfit", sans-serif;
+        font-size: 1.9rem;
+        color: var(--brand-green-deep);
+        line-height: 1;
+        margin: 0.45rem 0 0.3rem;
+    }
+
+    .summary-card span,
+    .summary-card p {
+        color: var(--brand-muted);
+        margin: 0;
+    }
+
+    .delivery-card {
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(31, 111, 67, 0.1);
+        box-shadow: 0 18px 44px rgba(19, 53, 37, 0.08);
+    }
+
+    .delivery-head,
+    .delivery-meta,
+    .delivery-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .delivery-meta {
+        color: var(--brand-muted);
+        margin: 1rem 0;
+    }
+
+    @media (max-width: 767.98px) {
+        .driver-hero,
+        .delivery-card,
+        .summary-card {
+            padding: 1.4rem;
+        }
+
+        .driver-summary,
+        .delivery-head,
+        .delivery-meta,
+        .delivery-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .delivery-head,
+        .delivery-meta,
+        .delivery-actions {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="driver-shell">
+    <section class="driver-hero">
+        <span class="hero-chip">Driver Panel</span>
+        <h1 class="mb-2">Assigned deliveries dashboard.</h1>
+        <p>Drivers can review assigned orders, confirm destinations, and move delivery statuses forward without leaving the workflow.</p>
+    </section>
+
+    <section class="driver-summary">
+        <article class="summary-card">
+            <span>Assigned orders</span>
+            <strong>{{ delivery_count }}</strong>
+            <p>Total active deliveries assigned to you.</p>
+        </article>
+        <article class="summary-card">
+            <span>In transit</span>
+            <strong>{{ transit_count }}</strong>
+            <p>Orders currently on the road.</p>
+        </article>
+        <article class="summary-card">
+            <span>Arrived</span>
+            <strong>{{ arrived_count }}</strong>
+            <p>Orders that have reached the customer destination.</p>
+        </article>
+    </section>
+
+    {% if orders %}
+        <section class="delivery-list">
+            {% for order in orders %}
+                <article class="delivery-card">
+                    <div class="delivery-head">
+                        <div>
+                            <span class="order-label">Order #{{ order.id }}</span>
+                            <h3 class="mt-3 mb-1">{{ order.service.name }}</h3>
+                        </div>
+                        <span class="price-pill">{{ order.display_status }}</span>
+                    </div>
+
+                    <div class="delivery-meta">
+                        <span>Destination: {{ order.delivery_location|default:"Pick up at store" }}</span>
+                        <span>Updated {{ order.updated_at|timesince }} ago</span>
+                        <span>Estimated delivery: {{ order.estimated_delivery|date:"M d, Y H:i"|default:"Not set" }}</span>
+                        {% if order.tracking.notes %}
+                            <span>Notes: {{ order.tracking.notes }}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="delivery-actions">
+                        <a href="{% url 'update_order_status' order.id 'In Transit' %}" class="btn btn-soft rounded-pill px-4">Mark In Transit</a>
+                        <a href="{% url 'update_order_status' order.id 'Arrived' %}" class="btn btn-soft rounded-pill px-4">Confirm Arrived</a>
+                        <a href="{% url 'update_order_status' order.id 'Completed' %}" class="btn btn-brand rounded-pill px-4">Complete Delivery</a>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="empty-card">
+            <h3 class="mb-2">No active deliveries</h3>
+            <p class="mb-0">Assigned delivery work will appear here when orders are routed to the logged-in driver.</p>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

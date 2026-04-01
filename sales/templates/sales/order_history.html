@@ -1,0 +1,394 @@
+{% extends 'base.html' %}
+
+{% block title %}Agrovet Pro | Order History{% endblock %}
+
+{% block extra_head %}
+<style>
+    .orders-page {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .orders-hero {
+        padding: 2.3rem;
+        border-radius: 1.8rem;
+        background: linear-gradient(135deg, rgba(13, 77, 44, 0.96) 0%, rgba(31, 111, 67, 0.92) 58%, rgba(184, 214, 106, 0.82) 100%);
+        color: #f8fff3;
+        box-shadow: 0 28px 70px rgba(13, 77, 44, 0.22);
+    }
+
+    .orders-hero p {
+        color: rgba(248, 255, 243, 0.86);
+        max-width: 44rem;
+        margin-bottom: 0;
+    }
+
+    .hero-chip {
+        display: inline-block;
+        margin-bottom: 0.8rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .orders-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .orders-filter-bar,
+    .insight-card {
+        padding: 1.35rem;
+        border-radius: 1.4rem;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(31, 111, 67, 0.1);
+        box-shadow: 0 18px 44px rgba(19, 53, 37, 0.08);
+    }
+
+    .filter-pills {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+    }
+
+    .filter-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.7rem 1rem;
+        border-radius: 999px;
+        border: 1px solid rgba(31, 111, 67, 0.12);
+        background: rgba(246, 249, 243, 0.9);
+        color: var(--brand-ink);
+        font-weight: 600;
+    }
+
+    .filter-pill.active {
+        background: linear-gradient(135deg, rgba(31, 111, 67, 0.14) 0%, rgba(184, 214, 106, 0.24) 100%);
+        color: var(--brand-green-deep);
+        border-color: rgba(31, 111, 67, 0.2);
+    }
+
+    .filter-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 1.8rem;
+        height: 1.8rem;
+        padding: 0 0.45rem;
+        border-radius: 999px;
+        background: rgba(31, 111, 67, 0.08);
+        font-size: 0.85rem;
+    }
+
+    .orders-insights {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 1rem;
+    }
+
+    .mini-chart {
+        display: grid;
+        gap: 0.8rem;
+        margin-top: 1rem;
+    }
+
+    .mini-chart-row {
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .mini-chart-row header {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        color: var(--brand-muted);
+        font-size: 0.92rem;
+    }
+
+    .mini-chart-track {
+        height: 0.75rem;
+        border-radius: 999px;
+        background: rgba(31, 111, 67, 0.08);
+        overflow: hidden;
+    }
+
+    .mini-chart-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #1f6f43 0%, #8bc766 100%);
+    }
+
+    .summary-card,
+    .order-card {
+        padding: 1.35rem;
+        border-radius: 1.4rem;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(31, 111, 67, 0.1);
+        box-shadow: 0 18px 44px rgba(19, 53, 37, 0.08);
+    }
+
+    .summary-card span {
+        color: var(--brand-muted);
+        font-size: 0.95rem;
+    }
+
+    .summary-card strong {
+        display: block;
+        font-family: "Outfit", sans-serif;
+        font-size: 2rem;
+        line-height: 1;
+        margin: 0.5rem 0 0.3rem;
+        color: var(--brand-green-deep);
+    }
+
+    .orders-stack {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .order-card {
+        display: grid;
+        gap: 1.1rem;
+    }
+
+    .order-top,
+    .order-meta,
+    .order-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .order-label {
+        display: inline-block;
+        padding: 0.4rem 0.72rem;
+        border-radius: 999px;
+        background: rgba(31, 111, 67, 0.08);
+        color: var(--brand-green-deep);
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .price-pill,
+    .location-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.55rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(22, 49, 38, 0.06);
+        color: var(--brand-ink);
+        font-weight: 600;
+    }
+
+    .timeline-track {
+        height: 0.9rem;
+        border-radius: 999px;
+        overflow: hidden;
+        background: rgba(31, 111, 67, 0.08);
+    }
+
+    .timeline-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #1f6f43 0%, #8bc766 100%);
+    }
+
+    .status-note,
+    .order-meta,
+    .order-footer {
+        color: var(--brand-muted);
+    }
+
+    .empty-card {
+        padding: 3rem 1.5rem;
+        text-align: center;
+        border-radius: 1.6rem;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px dashed rgba(31, 111, 67, 0.18);
+        color: var(--brand-muted);
+    }
+
+    @media (max-width: 991.98px) {
+        .orders-summary,
+        .orders-insights {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .orders-hero,
+        .summary-card,
+        .order-card {
+            padding: 1.4rem;
+        }
+
+        .order-top,
+        .order-meta,
+        .order-footer {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="orders-page">
+    <section class="orders-hero">
+        <span class="hero-chip">Customer Dashboard</span>
+        <h1 class="mb-3">Your orders and delivery progress.</h1>
+        <p>Follow each order from request to arrival with clearer delivery status, pricing details, and location history in one place.</p>
+    </section>
+
+    <section class="orders-summary">
+        <article class="summary-card">
+            <span>Total orders</span>
+            <strong>{{ all_order_count }}</strong>
+            <div>Orders currently linked to your account.</div>
+        </article>
+        <article class="summary-card">
+            <span>Recent focus</span>
+            <strong>{{ recent_status }}</strong>
+            <div>Latest visible status from your most recent order.</div>
+        </article>
+        <article class="summary-card">
+            <span>Tracking support</span>
+            <strong>{{ orders|length }}</strong>
+            <div>Orders visible in the current filtered view.</div>
+        </article>
+    </section>
+
+    {% if status_filters %}
+        <section class="orders-filter-bar">
+            <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                <div>
+                    <span class="pill-tag">Filters</span>
+                    <h3 class="mt-3 mb-1">Narrow the order list faster</h3>
+                    <p class="text-muted mb-0">Filter by status to focus on payments, deliveries, or completed work.</p>
+                </div>
+                {% if selected_status %}
+                    <a href="{% url 'order_history' %}" class="btn btn-soft rounded-pill px-4">Clear Filter</a>
+                {% endif %}
+            </div>
+
+            <div class="filter-pills">
+                <a href="{% url 'order_history' %}" class="filter-pill {% if not selected_status %}active{% endif %}">
+                    <span>All</span>
+                    <span class="filter-count">{{ all_order_count }}</span>
+                </a>
+                {% for filter in status_filters %}
+                    <a href="?status={{ filter.value|urlencode }}" class="filter-pill {% if selected_status == filter.value %}active{% endif %}">
+                        <span>{{ filter.label }}</span>
+                        <span class="filter-count">{{ filter.count }}</span>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="orders-insights">
+            <article class="insight-card">
+                <span class="pill-tag">Order Mix</span>
+                <h3 class="mt-3">Status distribution</h3>
+                <p class="text-muted mb-0">A simple view of which stages are most common in your current order history.</p>
+
+                <div class="mini-chart">
+                    {% for status, count in status_analytics %}
+                        <div class="mini-chart-row">
+                            <header>
+                                <span>{{ status }}</span>
+                                <strong>{{ count }}</strong>
+                            </header>
+                            <div class="mini-chart-track">
+                                <div class="mini-chart-fill" style="width:{% widthratio count all_order_count 100 %}%;"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </article>
+
+            <article class="insight-card">
+                <span class="pill-tag">Current View</span>
+                <h3 class="mt-3">{% if selected_status %}{{ selected_status }}{% else %}All orders{% endif %}</h3>
+                <p class="text-muted mb-3">
+                    {% if selected_status %}
+                        You are currently focused on one delivery stage to review progress faster.
+                    {% else %}
+                        You are viewing the full order timeline across all statuses.
+                    {% endif %}
+                </p>
+                <a href="{% url 'index' %}" class="btn btn-brand rounded-pill px-4">Order More Services</a>
+            </article>
+        </section>
+    {% endif %}
+
+    {% if orders %}
+        <section class="orders-stack">
+            {% for order in orders %}
+                {% with status=order.display_status %}
+                <article class="order-card">
+                    <div class="order-top">
+                        <div>
+                            <span class="order-label">Order #{{ order.id }}</span>
+                            <h3 class="mt-3 mb-1">{{ order.service.name }}</h3>
+                            <div class="status-note">Current status: <strong>{{ status }}</strong></div>
+                        </div>
+                        <span class="price-pill">KES {{ order.service.price }}</span>
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-between mb-2 gap-3 flex-wrap">
+                            <span class="status-note">Delivery progress</span>
+                            <span class="status-note">{{ status }}</span>
+                        </div>
+                        <div class="timeline-track">
+                            <div
+                                class="timeline-fill"
+                                style="width:{% if status == 'Pending Payment' or status == 'Pending' %}12%{% elif status == 'Paid' or status == 'Processing' or status == 'Dispatched' %}38%{% elif status == 'In Transit' %}72%{% elif status == 'On Site' or status == 'Arrived' or status == 'Picked Up' %}88%{% elif status == 'Completed' or status == 'Delivered' %}100%{% else %}20%{% endif %};"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <div class="order-meta">
+                        <span>Ordered {{ order.order_date|date:"M d, Y" }}</span>
+                        <span>Updated {{ order.updated_at|timesince }} ago</span>
+                        <span>Quantity {{ order.quantity }}</span>
+                    </div>
+
+                    <div class="order-footer">
+                        <span class="location-pill">{{ order.delivery_location|default:"Pick up at store" }}</span>
+                        {% if order.is_paid %}
+                            <span>Payment confirmed{% if order.transaction_id %}: {{ order.transaction_id }}{% endif %}</span>
+                        {% else %}
+                            <span>Payment awaiting confirmation</span>
+                        {% endif %}
+                        {% if order.tracking.driver %}
+                            <span>Assigned driver: {{ order.tracking.driver.username }}</span>
+                        {% elif order.driver %}
+                            <span>Assigned driver: {{ order.driver.username }}</span>
+                        {% else %}
+                            <span>Driver assignment pending</span>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endwith %}
+            {% endfor %}
+        </section>
+    {% else %}
+        <section class="empty-card">
+            <h3 class="mb-2">No orders yet</h3>
+            <p class="mb-3">Your first order will appear here with payment and delivery tracking details.</p>
+            <a href="{% url 'index' %}" class="btn btn-brand rounded-pill px-4">Browse the Catalog</a>
+        </section>
+    {% endif %}
+</div>
+{% endblock %}

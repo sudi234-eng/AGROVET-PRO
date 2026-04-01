@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+
+{% block title %}Agrovet Pro | Dashboard{% endblock %}
+
+{% block extra_head %}
+<style>
+    .dashboard-shell {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .dashboard-hero {
+        padding: 2.3rem;
+        border-radius: 1.8rem;
+        background: linear-gradient(135deg, rgba(22, 49, 38, 0.96) 0%, rgba(31, 111, 67, 0.92) 62%, rgba(184, 214, 106, 0.82) 100%);
+        color: #f8fff3;
+    }
+
+    .dashboard-hero p {
+        color: rgba(248, 255, 243, 0.84);
+        margin-bottom: 0;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1.2rem;
+    }
+
+    .dashboard-card {
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(31, 111, 67, 0.1);
+        box-shadow: 0 18px 44px rgba(19, 53, 37, 0.08);
+    }
+
+    .dashboard-card p {
+        color: var(--brand-muted);
+    }
+
+    .dashboard-stat {
+        display: block;
+        font-family: "Outfit", sans-serif;
+        font-size: 2rem;
+        line-height: 1;
+        margin: 0.6rem 0 0.35rem;
+        color: var(--brand-green-deep);
+    }
+
+    .dashboard-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.2rem;
+    }
+
+    .dashboard-band {
+        padding: 1.7rem;
+        border-radius: 1.5rem;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(31, 111, 67, 0.1);
+        box-shadow: 0 18px 44px rgba(19, 53, 37, 0.08);
+    }
+
+    .dashboard-band p {
+        color: var(--brand-muted);
+        margin-bottom: 0;
+    }
+
+    .insight-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 1.2rem;
+    }
+
+    .dashboard-lists {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.2rem;
+    }
+
+    .insight-card {
+        padding: 1.7rem;
+        border-radius: 1.5rem;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(31, 111, 67, 0.1);
+        box-shadow: 0 18px 44px rgba(19, 53, 37, 0.08);
+    }
+
+    .mini-chart {
+        display: grid;
+        gap: 0.9rem;
+        margin-top: 1rem;
+    }
+
+    .mini-chart-row {
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .mini-chart-row header {
+        display: flex;
+        justify-content: space-between;
+        color: var(--brand-muted);
+        font-size: 0.92rem;
+    }
+
+    .mini-chart-track {
+        height: 0.7rem;
+        border-radius: 999px;
+        background: rgba(31, 111, 67, 0.08);
+        overflow: hidden;
+    }
+
+    .mini-chart-fill {
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #1f6f43 0%, #8bc766 100%);
+    }
+
+    .data-list {
+        display: grid;
+        gap: 0.85rem;
+        margin-top: 1rem;
+    }
+
+    .data-row {
+        padding: 1rem 1.05rem;
+        border-radius: 1rem;
+        background: rgba(246, 249, 243, 0.88);
+        border: 1px solid rgba(31, 111, 67, 0.08);
+    }
+
+    .data-row strong {
+        display: block;
+        margin-bottom: 0.2rem;
+    }
+
+    .data-row span {
+        color: var(--brand-muted);
+        font-size: 0.92rem;
+    }
+
+    @media (max-width: 991.98px) {
+        .dashboard-grid,
+        .dashboard-actions,
+        .insight-grid,
+        .dashboard-lists {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-shell">
+    <section class="dashboard-hero">
+        <span class="hero-chip">Platform Home</span>
+        <h1 class="mb-3">Agrovet Pro dashboard.</h1>
+        <p>Everything important stays within reach, from storefront browsing and order tracking to driver workflow and administration.</p>
+    </section>
+
+    <section class="dashboard-grid">
+        <article class="dashboard-card">
+            <span class="pill-tag">My Orders</span>
+            <span class="dashboard-stat">{{ user_order_count }}</span>
+            <h3>Your order requests</h3>
+            <p>Total orders linked to your own account.</p>
+        </article>
+
+        <article class="dashboard-card">
+            <span class="pill-tag">Paid</span>
+            <span class="dashboard-stat">{{ paid_order_count }}</span>
+            <h3>Confirmed payments</h3>
+            <p>Orders that have successfully reflected M-Pesa payment confirmation.</p>
+        </article>
+
+        <article class="dashboard-card">
+            <span class="pill-tag">Completed</span>
+            <span class="dashboard-stat">{{ completed_order_count }}</span>
+            <h3>Finished deliveries</h3>
+            <p>Orders that have reached full completion on your dashboard.</p>
+        </article>
+
+        <article class="dashboard-card">
+            <span class="pill-tag">System</span>
+            <span class="dashboard-stat">{{ order_count }}</span>
+            <h3>Platform order volume</h3>
+            <p>Overall order count currently recorded across the whole system.</p>
+        </article>
+    </section>
+
+    <section class="dashboard-actions">
+        <article class="dashboard-band">
+            <span class="pill-tag">Storefront</span>
+            <h3 class="mt-3">Customer-facing experience</h3>
+            <p class="mb-3">Review the premium homepage, browse products, and keep the public frontend polished.</p>
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="{% url 'index' %}" class="btn btn-brand rounded-pill px-4">Open Homepage</a>
+                <a href="{% url 'product_catalog' %}" class="btn btn-soft rounded-pill px-4">Open Catalog</a>
+            </div>
+        </article>
+
+        <article class="dashboard-band">
+            <span class="pill-tag">Operations</span>
+            <h3 class="mt-3">Tracking and administration</h3>
+            <p class="mb-3">After M-Pesa payment is confirmed, your order status will reflect here and continue through delivery tracking.</p>
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="{% url 'order_history' %}" class="btn btn-soft rounded-pill px-4">View Orders</a>
+                {% if user.role == 'driver' %}
+                    <a href="{% url 'driver_dashboard' %}" class="btn btn-soft rounded-pill px-4">Open Driver Panel</a>
+                {% endif %}
+                {% if user.is_staff or user.is_superuser or user.role == 'admin' %}
+                    <a href="/admin/" class="btn btn-brand rounded-pill px-4">Open Admin Panel</a>
+                {% endif %}
+            </div>
+        </article>
+    </section>
+
+    <section class="insight-grid">
+        <article class="insight-card">
+            <span class="pill-tag">System Pulse</span>
+            <h3 class="mt-3">Platform activity snapshot</h3>
+            <p class="text-muted mb-0">A quick visual read of how the core areas of Agrovet Pro are currently populated.</p>
+
+            <div class="mini-chart">
+                <div class="mini-chart-row">
+                    <header>
+                        <span>Products and services</span>
+                        <strong>{{ product_count }}</strong>
+                    </header>
+                    <div class="mini-chart-track"><div class="mini-chart-fill" style="width:{% widthratio product_count 20 100 %}%;"></div></div>
+                </div>
+                <div class="mini-chart-row">
+                    <header>
+                        <span>Orders in system</span>
+                        <strong>{{ order_count }}</strong>
+                    </header>
+                    <div class="mini-chart-track"><div class="mini-chart-fill" style="width:{% widthratio order_count 20 100 %}%;"></div></div>
+                </div>
+                <div class="mini-chart-row">
+                    <header>
+                        <span>Paid orders</span>
+                        <strong>{{ paid_order_count }}</strong>
+                    </header>
+                    <div class="mini-chart-track"><div class="mini-chart-fill" style="width:{% widthratio paid_order_count 20 100 %}%;"></div></div>
+                </div>
+                <div class="mini-chart-row">
+                    <header>
+                        <span>Completed orders</span>
+                        <strong>{{ completed_order_count }}</strong>
+                    </header>
+                    <div class="mini-chart-track"><div class="mini-chart-fill" style="width:{% widthratio completed_order_count 20 100 %}%;"></div></div>
+                </div>
+            </div>
+        </article>
+
+        <article class="insight-card">
+            <span class="pill-tag">Next Step</span>
+            <h3 class="mt-3">Payments now drive the customer dashboard</h3>
+            <p class="text-muted mb-3">Once M-Pesa confirms a payment, the order is marked paid and the dashboard counters update to reflect progress.</p>
+            <div class="d-grid gap-2">
+                <a href="{% url 'index' %}" class="btn btn-brand rounded-pill px-4">Review Full Frontend</a>
+                <a href="{% url 'order_history' %}" class="btn btn-soft rounded-pill px-4">Track My Orders</a>
+            </div>
+        </article>
+    </section>
+
+    <section class="dashboard-lists">
+        <article class="insight-card">
+            <span class="pill-tag">Orders</span>
+            <h3 class="mt-3">Recent order list</h3>
+            <div class="data-list">
+                {% for order in recent_orders %}
+                    <div class="data-row">
+                        <strong>{{ order.service.name }}</strong>
+                        <span>Order #{{ order.id }} | {{ order.display_status }} | KES {{ order.service.price }}</span>
+                    </div>
+                {% empty %}
+                    <div class="data-row">
+                        <strong>No orders yet</strong>
+                        <span>Your placed orders will appear here.</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="insight-card">
+            <span class="pill-tag">Stocks</span>
+            <h3 class="mt-3">Low stock watch</h3>
+            <div class="data-list">
+                {% for product in stock_items %}
+                    <div class="data-row">
+                        <strong>{{ product.name }}</strong>
+                        <span>Stock: {{ product.stock_quantity }} | {{ product.get_category_display }}</span>
+                    </div>
+                {% empty %}
+                    <div class="data-row">
+                        <strong>No stock data</strong>
+                        <span>Products will appear here once available.</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="insight-card">
+            <span class="pill-tag">Delivery</span>
+            <h3 class="mt-3">Delivery list</h3>
+            <div class="data-list">
+                {% for order in delivery_items %}
+                    <div class="data-row">
+                        <strong>{{ order.service.name }}</strong>
+                        <span>{{ order.display_status }} | {{ order.delivery_location|default:"Pick up at store" }}</span>
+                    </div>
+                {% empty %}
+                    <div class="data-row">
+                        <strong>No deliveries yet</strong>
+                        <span>Delivery progress will appear here after ordering.</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="insight-card">
+            <span class="pill-tag">Payments</span>
+            <h3 class="mt-3">Payment status list</h3>
+            <div class="data-list">
+                {% for order in payment_items %}
+                    <div class="data-row">
+                        <strong>{{ order.service.name }}</strong>
+                        <span>{% if order.is_paid %}Paid{% else %}Pending Payment{% endif %}{% if order.transaction_id %} | Ref: {{ order.transaction_id }}{% endif %}</span>
+                    </div>
+                {% empty %}
+                    <div class="data-row">
+                        <strong>No payments yet</strong>
+                        <span>Payment confirmations will appear here once orders are created.</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+</div>
+{% endblock %}
